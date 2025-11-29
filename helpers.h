@@ -112,8 +112,9 @@
         }                                                       \
         if((list).count > 0){                                   \
             item_to_str(buf, (list).items[list.count - 1]);     \
+            printf("%s", buf);                              \
         }                                                       \
-        printf("%s ]\n", buf);                                  \
+        printf(" ]\n");                                         \
     } while(0)
 
 // make the foreach loops accept the iter variable name, so that these loops can be nested

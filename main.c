@@ -2,7 +2,7 @@
 
 #include "dfa.h"
 
-int main(){
+DFA* create_M1_dfa(){
     DFA* dfa = create_dfa("M1");
     print_dfa(dfa);
 
@@ -25,6 +25,13 @@ int main(){
     add_final_state(dfa, 'C'); 
     
     print_dfa(dfa);
+    
+    return dfa;
+}
+
+int main(){
+    DFA* dfa = create_M1_dfa();
+
     destroy_dfa(dfa);
     return 0;
 }
