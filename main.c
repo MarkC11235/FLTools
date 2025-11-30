@@ -2,6 +2,7 @@
 
 #include "dfa.h"
 
+// accepts a*b*c*
 DFA* create_M1_dfa(){
     DFA* dfa = create_dfa("M1");
     print_dfa(dfa);
@@ -36,13 +37,15 @@ int main(){
     lpush(input, 'a');
     lpush(input, 'a');
     lpush(input, 'b');
-    lpush(input, 'b');
     lpush(input, 'c');
     lpush(input, 'c');
-    
+    lpush(input, 'c');
+    lpush(input, 'c');
+    lpush(input, 'c');
+    lpush(input, 'c');
     
 
-    bool res = run_dfa(dfa, input);
+    bool res = run_dfa(dfa, input, true);
     printf("Result: %d\n", res);
 
     destroy_dfa(dfa);

@@ -128,20 +128,31 @@ DFA_Step step_dfa(DFA* dfa, char current_state, char input){
     return (DFA_Step){.code = code, .next_state = next_state};
 }
 
-bool run_dfa(DFA* dfa, list(char) input_tape){
+bool run_dfa(DFA* dfa, list(char) input_tape, bool verbose){
+    if(verbose){
+        printf("Running %s on input: ", dfa->name);
+        lprint(input_tape, ctostr);
+    }
+
     char current_state = dfa->start_state; 
     bool accept = is_state_accepting(dfa, dfa->start_state); // if start state is accepting make it true 
     foreach(c, input_tape,
+        if(verbose){
+            printf("State: %c\n", current_state);
+            printf("Input: %c\n\n", c);
+        }
+
         DFA_Step dfa_step = step_dfa(dfa, current_state, c);
         char code = dfa_step.code;
         switch(code){
             case 'T': // Trap
+                if(verbose) printf("Entered trap state\n");
                 return false; // do not accept
                 break;
-            case 'A':
+            case 'A': // Accept
                 accept = true;
                 break;
-            case 'R':
+            case 'R': // Reject
                 accept = false;
                 break;
             default:
@@ -151,6 +162,8 @@ bool run_dfa(DFA* dfa, list(char) input_tape){
         current_state = dfa_step.next_state;
     );
 
+
+    printf("Final State: %c\n\n", current_state);
     return accept;
 }
 
