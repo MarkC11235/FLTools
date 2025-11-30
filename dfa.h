@@ -103,6 +103,7 @@ typedef struct {
     char next_state;
 } DFA_Step;
 
+// Checks if given the current state, input if there is a transition
 bool is_valid_step(DFA* dfa, char current_state, char input){
     foreach(transition, dfa->transitions,
         if(transition.from == current_state && transition.input == input) return true;
@@ -118,6 +119,8 @@ char get_next_state(DFA* dfa, char current_state, char input){
     return 'x';
 }
 
+// Return if the next state is accept, reject, or trap
+//        and the next state
 DFA_Step step_dfa(DFA* dfa, char current_state, char input){
     bool valid_step = is_valid_step(dfa, current_state, input);
     if (!valid_step) return (DFA_Step){.code = 'T', .next_state = 'x'};
@@ -128,6 +131,8 @@ DFA_Step step_dfa(DFA* dfa, char current_state, char input){
     return (DFA_Step){.code = code, .next_state = next_state};
 }
 
+// Runs DFA on input tape 
+// Returns true on accept and false on reject
 bool run_dfa(DFA* dfa, list(char) input_tape, bool verbose){
     if(verbose){
         printf("Running %s on input: ", dfa->name);
@@ -135,7 +140,8 @@ bool run_dfa(DFA* dfa, list(char) input_tape, bool verbose){
     }
 
     char current_state = dfa->start_state; 
-    bool accept = is_state_accepting(dfa, dfa->start_state); // if start state is accepting make it true 
+    bool accept = is_state_accepting(dfa, dfa->start_state); // if start state is accepting make it true because it will accept an empty input
+    
     foreach(c, input_tape,
         if(verbose){
             printf("State: %c\n", current_state);
@@ -169,9 +175,18 @@ bool run_dfa(DFA* dfa, list(char) input_tape, bool verbose){
 
 
 
+// DFA FROM FILE ===================================================================
 
-
-
+DFA* dfa_from_file(char* file_path){
+    FILE* fp = fopen(file_path, "r");
+    if(fp == NULL) {
+        printf("Cannot open %s\n", file_path);
+        exit(1);
+    }
+    
+    fclose(fp);
+    TODO("READ DFA FROM FILE");
+}
 
 
 

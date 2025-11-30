@@ -2,7 +2,7 @@
 
 #include "dfa.h"
 
-// accepts a*b*c*
+// accepts a*b+c+
 DFA* create_M1_dfa(){
     DFA* dfa = create_dfa("M1");
     print_dfa(dfa);
@@ -33,8 +33,13 @@ DFA* create_M1_dfa(){
 int main(){
     DFA* dfa = create_M1_dfa();
 
-    string input = screate(10);
-    sappend(input, "aaabbcccc"); 
+//    string input = screate(10);
+//    sappend(input, "aaabccc"); 
+
+    string input;
+    sfromfile(input, "input.txt");
+    sprint(input);
+    lprint(input, ctostr);
 
     bool res = run_dfa(dfa, input, true);
     printf("Result: %d\n", res);

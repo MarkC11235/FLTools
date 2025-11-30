@@ -154,6 +154,21 @@
         printf("%s\n", (str).items);         \
     } while(0)
 
+#define sfromfile(str, filepath)                \
+    FILE* fp = fopen(filepath, "r");            \
+    if(fp == NULL) {                            \
+        printf("Cannot open %s\n", filepath);   \
+        exit(1);                                \
+    }                                           \
+    fseek(fp, 0, SEEK_END);                     \
+    long size = ftell(fp);                      \
+    fseek(fp, 0, SEEK_SET);                     \
+    str = screate(size);                        \
+    fread(str.items, 1, size, fp);              \
+    str.count = size-1;                         \
+    fclose(fp);
+ 
+
 // ==================================================================================================
 
 
