@@ -3,6 +3,8 @@
 
 #include "helpers.h"
 
+// DFA CREATION ===============================================
+
 def_list(char);
 
 typedef struct {
@@ -85,6 +87,71 @@ void set_start_state(DFA* dfa, char state){
 
 void add_final_state(DFA* dfa, char state){
     lpush(dfa->final_states, state); 
+}
+
+bool is_state_accepting(DFA* dfa, char state){
+    foreach(final_state, dfa->final_states, 
+        if(state == final_state) return true;
+    );
+    return false;
+}
+
+// DFA RUN ===============================================
+
+typedef struct {
+    char code;
+    char next_state;
+} DFA_Step;
+
+bool is_valid_step(DFA* dfa, char current_state, char input){
+    foreach(transition, dfa->transitions,
+        if(transition.from == current_state && transition.input == input) return true;
+    );
+    return false;
+}
+
+char get_next_state(DFA* dfa, char current_state, char input){
+    foreach(transition, dfa->transitions,
+        if(transition.from == current_state && transition.input == input) return transition.to;
+    );
+    ERROR("State: %c does to have a transition for input: %c", current_state, input);
+    return 'x';
+}
+
+DFA_Step step_dfa(DFA* dfa, char current_state, char input){
+    bool valid_step = is_valid_step(dfa, current_state, input);
+    if (!valid_step) return (DFA_Step){.code = 'T', .next_state = 'x'};
+    char next_state = get_next_state(dfa, current_state, input);
+    bool accept = is_state_accepting(dfa, next_state);
+    char code = 'R';
+    if(accept) code = 'A';
+    return (DFA_Step){.code = code, .next_state = next_state};
+}
+
+bool run_dfa(DFA* dfa, list(char) input_tape){
+    char current_state = dfa->start_state; 
+    bool accept = is_state_accepting(dfa, dfa->start_state); // if start state is accepting make it true 
+    foreach(c, input_tape,
+        DFA_Step dfa_step = step_dfa(dfa, current_state, c);
+        char code = dfa_step.code;
+        switch(code){
+            case 'T': // Trap
+                return false; // do not accept
+                break;
+            case 'A':
+                accept = true;
+                break;
+            case 'R':
+                accept = false;
+                break;
+            default:
+                ERROR("UNKNOWN STATE CODE");
+                break;
+        }
+        current_state = dfa_step.next_state;
+    );
+
+    return accept;
 }
 
 
