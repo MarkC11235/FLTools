@@ -146,7 +146,7 @@ bool run_dfa(DFA* dfa, list(char) input_tape, bool verbose){
         char code = dfa_step.code;
         switch(code){
             case 'T': // Trap
-                if(verbose) printf("Entered trap state\n");
+                if(verbose) printf("Entered Trap State\n");
                 return false; // do not accept
                 break;
             case 'A': // Accept

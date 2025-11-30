@@ -33,17 +33,8 @@ DFA* create_M1_dfa(){
 int main(){
     DFA* dfa = create_M1_dfa();
 
-    list(char) input = lcreate(char, 10);
-    lpush(input, 'a');
-    lpush(input, 'a');
-    lpush(input, 'b');
-    lpush(input, 'c');
-    lpush(input, 'c');
-    lpush(input, 'c');
-    lpush(input, 'c');
-    lpush(input, 'c');
-    lpush(input, 'c');
-    
+    string input = screate(10);
+    sappend(input, "aaabbcccc"); 
 
     bool res = run_dfa(dfa, input, true);
     printf("Result: %d\n", res);
